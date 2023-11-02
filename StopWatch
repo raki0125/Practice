@@ -1,0 +1,68 @@
+import React, { useState } from "react";
+
+const title = "Let's start the timer";
+
+function padTime(value) {
+  return value.toString().padStart(2, "0");
+}
+
+export default function App() {
+  const [timeLeft, setTimeLeft] = useState(25 * 60)
+//replace the 25 for minutes
+  const min = padTime(Math.floor(timeLeft / 60));
+  const sec = padTime(timeLeft - min * 60);
+
+  const addStart = () => {
+    // const enterMin = (prompt("Enter minutes"));
+    // const enterSec = prompt("Enter seconds");
+    // const totalTime = enterMin * 60 + enterSec;
+
+    let times;
+
+    // if (totalTime > 0) {
+    //   setTimeLeft(totalTime);
+
+    times = setInterval(() => {
+      setTimeLeft((tl) => {
+        if (tl > 1) return tl - 1;
+        else {
+          clearInterval(times); // Stop the timer when it reaches 0
+          return 0;
+        }
+      });
+    }, 1000);
+    // }
+  };
+
+  const addReset = (e) => {
+    setTimeLeft((prev) => {
+      if (prev) return 0;
+    });
+  };
+
+  const addStop = (e) => {
+    setTimeLeft((tl) => {
+      if (tl) return 0;
+      clearInterval(tl);
+    });
+  };
+
+  return (
+    <div className="App">
+      {title}
+      <div>
+        {min}:{sec}
+      </div>
+
+      <div>
+        <button onClick={addStart}>Start</button>
+        <button disabled={timeLeft === 0} onClick={addStop}>
+          Stop
+        </button>
+        <button disabled={timeLeft === 0} onClick={addReset}>
+          Reset
+        </button>
+      </div>
+    </div>
+  );
+}
